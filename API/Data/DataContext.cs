@@ -29,7 +29,10 @@ public class DataContext(DbContextOptions options) : DbContext(options)
         });
 
         builder.Entity<OrderProduct>()
-
+            // ASP .net Core pohjautuu nimeämiskäytäntöihin
+            // jokaisen modelin Id-propertysta tehdään oletuksena taulun perusavain
+            // kun kyseessä on välitaulu, merkataan molempien päätaulujen viiteavaimet 
+            // perusavaimeksi
             .HasKey(op => new
             {
                 op.OrderId,
@@ -48,6 +51,8 @@ public class DataContext(DbContextOptions options) : DbContext(options)
         .HasForeignKey(o => o.HandlerId)
         .OnDelete(DeleteBehavior.NoAction);
 
+
+        // relaatiot välitaulun ja päätetaulujen välillä
         builder.Entity<OrderProduct>()
         .HasOne(op => op.Order)
         .WithMany(o => o.OrderProducts)
