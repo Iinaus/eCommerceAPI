@@ -17,10 +17,6 @@ namespace API.Controllers
                 var products = await service.GetAll();
                 return Ok(products);
             }
-            catch (InvalidOperationException e)
-            {
-                return NotFound("products not found");
-            }
             catch (Exception e)
             {
                 return BadRequest(e.Message);

@@ -1,24 +1,21 @@
-using API.Data;
-using API.Data.Dtos;
 using API.Models;
 using API.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController(IUserService service) : ControllerBase
+    public class CategoriesController(ICategoryService service) : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<List<AppUser>>> GetAllUsers() 
+        public async Task<ActionResult<List<Category>>> GetAllCategories() 
         {
             try
             {
-                var users = await service.GetAll();
-                return Ok(users);
+                var categories = await service.GetAll();
+                return Ok(categories);
             }
             catch (Exception e)
             {
@@ -27,16 +24,16 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<AppUser>> GetUserById(int id) 
+        public async Task<ActionResult<Category>> GetCategoryById(int id) 
         {
             try
             {
-                var user = await service.GetById(id);
-                return Ok(user);
+                var category = await service.GetById(id);
+                return Ok(category);
             }
             catch (InvalidOperationException e)
             {
-                return NotFound("user not found");
+                return NotFound("category not found");
             }
             catch (Exception e)
             {
@@ -44,17 +41,17 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<AppUser>> UpdateUserById(int id, UpdateUserDto req) 
+        [HttpGet("{id}/products")]
+        public async Task<ActionResult<List<Product>>> GetProductsByCategoryId(int id)
         {
             try
             {
-                var user = await service.UpdateById(id, req);
-                return Ok(user);
+                var products = await service.GetProductsByCategoryId(id);
+                return Ok(products);
             }
             catch (InvalidOperationException e)
             {
-                return NotFound("user not found");
+                return NotFound("category not found");
             }
             catch (Exception e)
             {
