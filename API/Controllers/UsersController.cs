@@ -20,6 +20,10 @@ namespace API.Controllers
                 var users = await service.GetAll();
                 return Ok(users);
             }
+            catch (InvalidOperationException e)
+            {
+                return NotFound("users not found");
+            }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
