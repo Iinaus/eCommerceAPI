@@ -29,24 +29,27 @@ public class CategoryService(DataContext context) : ICategoryService
         try
         {
             var category = await GetById(id);
+            // TODO: tee DTO, jotta ei näytetä turhia tietoja?
+            var products = await context.Products
+                .Where(p => p.CategoryId == id)
+                .Select(p => new Product
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Description = p.Description,
+                    CategoryId = p.CategoryId,
+                    UnitPrice = p.UnitPrice
+                })
+                .ToListAsync();            
+
+            return products;
+            //Toinen vaihtoehto palauttaa --> missä tuon getterin on -> MODELISSA
+            //return category.Products();
         }
         catch (InvalidOperationException)
         {
             throw new InvalidOperationException();
         }
 
-        var products = await context.Products
-            .Where(p => p.CategoryId == id)
-            .Select(p => new Product
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Description = p.Description,
-                CategoryId = p.CategoryId,
-                UnitPrice = p.UnitPrice
-            })
-            .ToListAsync();
-
-        return products;
     }
 }
