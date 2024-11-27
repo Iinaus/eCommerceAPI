@@ -1,3 +1,4 @@
+using API.Data.Dtos;
 using API.Models;
 using API.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -48,6 +49,62 @@ namespace API.Controllers
             {
                 var products = await service.GetProductsByCategoryId(id);
                 return Ok(products);
+            }
+            catch (InvalidOperationException e)
+            {
+                return NotFound("category not found");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        // To-do: tähän autorisointi (vain adminkäyttöön)
+        [HttpPost]
+        public async Task<ActionResult<Category>> AddCategory(AddCategoryReqDto req)
+        {
+            try
+            {
+                var category = await service.Create(req);
+                return Ok(category);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Detail = "Unable to create new category"
+                });
+            }
+        }
+
+        // To-do: tähän autorisointi (vain adminkäyttöön)
+        [HttpPatch("{id}")]
+        public async Task<ActionResult<Category>> UpdateCategoryById(int id, UpdateCategoryDto req)
+        {
+            try
+            {
+                var category = await service.UpdateCategory(id, req);
+                return Ok(category);
+            }
+            catch (InvalidOperationException e)
+            {
+                return NotFound("category not found");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        // To-do: tähän autorisointi (vain adminkäyttöön)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteCategoryById(int id)
+        {
+            try
+            {
+                var category = await service.DeleteCategory(id);
+                return Ok();
             }
             catch (InvalidOperationException e)
             {

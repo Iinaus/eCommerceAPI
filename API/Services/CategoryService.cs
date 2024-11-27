@@ -1,5 +1,6 @@
 using System;
 using API.Data;
+using API.Data.Dtos;
 using API.Models;
 using API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -51,5 +52,38 @@ public class CategoryService(DataContext context) : ICategoryService
             throw new InvalidOperationException();
         }
 
+    }
+
+    public async Task<Category> Create(AddCategoryReqDto req)
+    {      
+      var category = new Category
+      {
+        Name = req.Name,
+        Description = req.Description,
+        // TO-DO: tarkista, mitä tähän pitää laittaa
+        UserId = 1
+      };
+
+      context.Categories.Add(category);
+      await context.SaveChangesAsync();
+
+      return category;
+    }
+
+    public async Task<Category> UpdateCategory(int id, UpdateCategoryDto req)
+    {
+      var category = await GetById(id);
+      category.Name = req.Name;
+      category.Description = req.Description;
+      await context.SaveChangesAsync();
+      return category;
+    }
+
+    public async Task<bool> DeleteCategory(int id)
+    {
+      var category = await GetById(id);
+      context.Categories.Remove(category);
+      await context.SaveChangesAsync();
+      return true;
     }
 }

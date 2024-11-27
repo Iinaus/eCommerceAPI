@@ -14,12 +14,16 @@ public class UserService(DataContext context, ITokenTool tokenCreator) : IUserSe
    public async Task<List<AppUser>> GetAll()
    {
       var users = await context.Users.ToListAsync();
+      //TO-DO: ei saa palauttaa koko useria: näkyy salasanat yms.
+      // Pitäisi palauttaa vain ne tiedot, jotka saa näyttää
       return users;
    }
 
    public async Task<AppUser> GetById(int id)
    {
       var user = await context.Users.FirstAsync(user => user.Id == id);
+      //TO-DO: ei saa palauttaa koko useria: näkyy salasanat yms.
+      // Pitäisi palauttaa vain ne tiedot, jotka saa näyttää
       return user;
    }
   
@@ -28,6 +32,8 @@ public class UserService(DataContext context, ITokenTool tokenCreator) : IUserSe
       var user = await GetById(id);
       user.UserName = req.UserName;
       await context.SaveChangesAsync();
+      //TO-DO: ei saa palauttaa koko useria: näkyy salasanat yms.
+      // Pitäisi palauttaa vain ne tiedot, jotka saa näyttää
       return user;
    }
 
