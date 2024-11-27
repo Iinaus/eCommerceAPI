@@ -19,6 +19,8 @@ namespace API.Controllers
             try
             {
                 var users = await service.GetAll();
+                //TO-DO: ei saa palauttaa koko useria: näkyy salasanat yms.
+                // Pitäisi palauttaa vain ne tiedot, jotka saa näyttää
                 return Ok(users);
             }
             catch (Exception e)
@@ -33,7 +35,9 @@ namespace API.Controllers
             try
             {
                 var user = await service.GetById(id);
-                return Ok(user);
+                return Ok(
+                    mapper.Map<UserResDto>(user)
+                );
             }
             catch (InvalidOperationException e)
             {
@@ -51,7 +55,9 @@ namespace API.Controllers
             try
             {
                 var user = await service.UpdateById(id, req);
-                return Ok(user);
+                return Ok(
+                    mapper.Map<UserResDto>(user)
+                );
             }
             catch (InvalidOperationException e)
             {
