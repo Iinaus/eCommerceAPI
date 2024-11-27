@@ -10,8 +10,7 @@ public interface ICategoryService
     Task<IPagedList<Category>> GetAll(int page);
 
     Task<Category> GetById(int id);
-
-    Task<List<Product>> GetProductsByCategoryId(int id);
+    Task<IPagedList<Product>> GetProductsByCategoryId(int id, int page);
 
     Task<Category> Create(AddCategoryReqDto req);
 
