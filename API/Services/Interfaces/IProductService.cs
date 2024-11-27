@@ -1,11 +1,12 @@
 using System;
 using API.Models;
+using X.PagedList;
 
 namespace API.Services.Interfaces;
 
 public interface IProductService
 {
-    Task<List<Product>> GetAll();
+    Task<IPagedList<Product>> GetAll(int page);
 
     Task<Product> GetById(int id);
 }

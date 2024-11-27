@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using API.Models;
 using API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using X.PagedList;
 
 namespace API.Controllers
 {
@@ -10,11 +11,11 @@ namespace API.Controllers
     public class ProductsController(IProductService service) : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetAllProducts() 
+        public async Task<ActionResult<IPagedList<Product>>> GetAllProducts([FromQuery] int page = 1)
         {
             try
             {
-                var products = await service.GetAll();
+                var products = await service.GetAll(page);
                 return Ok(products);
             }
             catch (Exception e)
