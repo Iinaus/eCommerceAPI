@@ -3,6 +3,7 @@ using API.Models;
 using API.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using X.PagedList;
 
 namespace API.Controllers
 {
@@ -11,11 +12,11 @@ namespace API.Controllers
     public class CategoriesController(ICategoryService service) : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<List<Category>>> GetAllCategories() 
+        public async Task<ActionResult<IPagedList<Category>>> GetAllCategories([FromQuery] int page = 1)
         {
             try
             {
-                var categories = await service.GetAll();
+                var categories = await service.GetAll(page);
                 return Ok(categories);
             }
             catch (Exception e)

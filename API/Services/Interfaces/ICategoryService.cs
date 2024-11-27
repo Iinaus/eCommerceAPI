@@ -1,12 +1,13 @@
 using System;
 using API.Data.Dtos;
 using API.Models;
+using X.PagedList;
 
 namespace API.Services.Interfaces;
 
 public interface ICategoryService
 {
-    Task<List<Category>> GetAll();
+    Task<IPagedList<Category>> GetAll(int page);
 
     Task<Category> GetById(int id);
 
