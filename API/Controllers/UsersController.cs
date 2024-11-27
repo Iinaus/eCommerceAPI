@@ -2,6 +2,7 @@ using API.Data;
 using API.Data.Dtos;
 using API.Models;
 using API.Services.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController(IUserService service) : ControllerBase
+    public class UsersController(IUserService service, IMapper mapper) : ControllerBase
     {
         [HttpGet]
         public async Task<ActionResult<List<AppUser>>> GetAllUsers() 
@@ -55,6 +56,39 @@ namespace API.Controllers
             catch (InvalidOperationException e)
             {
                 return NotFound("user not found");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("register")]
+        public async Task<ActionResult<UserResDto>> Register(AddUserReqDto req)
+        {
+            try
+            {
+                var user = await service.Create(req);
+                return Ok(
+                    mapper.Map<UserResDto>(user)
+                );
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Detail = "Unable to create new user"
+                });
+            }
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<LoginResDto>> Login(LoginReqDto req)
+        {
+            try
+            {
+                var token = await service.Login(req);
+                return Ok(token);
             }
             catch (Exception e)
             {

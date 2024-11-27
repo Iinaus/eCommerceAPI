@@ -12,4 +12,8 @@ public interface IUserService
 
     Task<AppUser> UpdateById(int id, UpdateUserDto req);
 
+    Task<AppUser> Create(AddUserReqDto req);
+
+    Task<LoginResDto?> Login(LoginReqDto req);
+
 }
