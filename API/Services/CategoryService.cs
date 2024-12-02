@@ -40,7 +40,7 @@ public class CategoryService(DataContext context, IMapper mapper) : ICategorySer
     var category = await context.Categories
       .Include(c => c.User)
       .Include(c => c.Products)
-      .FirstOrDefaultAsync(c => c.Id == id);
+      .FirstAsync(c => c.Id == id);
 
     return category;
   }
