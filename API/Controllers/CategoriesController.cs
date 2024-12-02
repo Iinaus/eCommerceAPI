@@ -1,6 +1,7 @@
 using API.Data.Dtos;
 using API.Models;
 using API.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using X.PagedList;
@@ -61,8 +62,8 @@ namespace API.Controllers
             }
         }
 
-        // To-do: tähän autorisointi (vain adminkäyttöön)
         [HttpPost]
+        [Authorize(Policy = "RequireAdminRole")]
         public async Task<ActionResult<Category>> AddCategory(AddCategoryReqDto req)
         {
             try
@@ -79,8 +80,8 @@ namespace API.Controllers
             }
         }
 
-        // To-do: tähän autorisointi (vain adminkäyttöön)
         [HttpPatch("{id}")]
+        [Authorize(Policy = "RequireAdminRole")]
         public async Task<ActionResult<Category>> UpdateCategoryById(int id, UpdateCategoryDto req)
         {
             try
@@ -98,8 +99,8 @@ namespace API.Controllers
             }
         }
 
-        // To-do: tähän autorisointi (vain adminkäyttöön)
         [HttpDelete("{id}")]
+        [Authorize(Policy = "RequireAdminRole")]
         public async Task<ActionResult> DeleteCategoryById(int id)
         {
             try

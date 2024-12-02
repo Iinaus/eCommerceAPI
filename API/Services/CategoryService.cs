@@ -18,7 +18,7 @@ public class CategoryService(DataContext context) : ICategoryService
   {
     if (page < 1)
     {
-        page = 1;
+      page = 1;
     }
 
     //TO-DO: miksi products[] on tyhjä, eli ei tuo tietoa?
