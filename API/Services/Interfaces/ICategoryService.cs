@@ -12,7 +12,7 @@ public interface ICategoryService
     Task<Category> GetById(int id);
     Task<IPagedList<Product>> GetProductsByCategoryId(int id, int page);
 
-    Task<Category> Create(AddCategoryReqDto req);
+    Task<Category> Create(AddCategoryReqDto req, AppUser loggedInUser);
 
     Task<Category> UpdateCategory(int id, UpdateCategoryDto req);
 

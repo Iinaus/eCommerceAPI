@@ -1,5 +1,6 @@
 using System.Text;
 using API.Data;
+using API.Middlewares;
 using API.Profiles;
 using API.Services;
 using API.Services.Interfaces;
@@ -61,6 +62,8 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("admin"));
 });
 
+builder.Services.AddScoped<RequireLoggedInUserMiddleware>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -68,6 +71,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseMiddleware<RequireLoggedInUserMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -73,14 +73,13 @@ public class CategoryService(DataContext context) : ICategoryService
     }
   }
 
-  public async Task<Category> Create(AddCategoryReqDto req)
+  public async Task<Category> Create(AddCategoryReqDto req, AppUser loggedInUser)
   {      
     var category = new Category
     {
       Name = req.Name,
       Description = req.Description,
-      // TO-DO: tarkista, mitä tähän pitää laittaa
-      UserId = 1
+      UserId = loggedInUser.Id
     };
 
     context.Categories.Add(category);

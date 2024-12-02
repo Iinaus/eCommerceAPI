@@ -68,7 +68,12 @@ namespace API.Controllers
         {
             try
             {
-                var category = await service.Create(req);
+                if (HttpContext.Items["loggedInUser"] is not AppUser loggedInUser)
+                {
+                    return Unauthorized();
+                }
+
+                var category = await service.Create(req, loggedInUser);
                 return Ok(category);
             }
             catch (Exception e)
@@ -86,6 +91,11 @@ namespace API.Controllers
         {
             try
             {
+                if (HttpContext.Items["loggedInUser"] is not AppUser loggedInUser)
+                {
+                    return Unauthorized();
+                }
+
                 var category = await service.UpdateCategory(id, req);
                 return Ok(category);
             }
@@ -105,6 +115,11 @@ namespace API.Controllers
         {
             try
             {
+                if (HttpContext.Items["loggedInUser"] is not AppUser loggedInUser)
+                {
+                    return Unauthorized();
+                }
+
                 var category = await service.DeleteCategory(id);
                 return Ok();
             }
