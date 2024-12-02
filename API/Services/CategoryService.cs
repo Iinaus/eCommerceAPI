@@ -95,10 +95,11 @@ public class CategoryService(DataContext context, IMapper mapper) : ICategorySer
   public async Task<bool> DeleteCategory(int id)
   {
     var category = await GetById(id);
-    //var products = category.Products;
-    //Console.WriteLine("############################################################");
-    //Console.WriteLine(products);
-    //context.Categories.Remove(category);
+    var products = category.Products.ToList();
+    
+    context.Products.RemoveRange(products);
+    context.Categories.Remove(category);
+    
     await context.SaveChangesAsync();
     return true;
   }
