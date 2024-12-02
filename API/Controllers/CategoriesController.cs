@@ -102,7 +102,9 @@ namespace API.Controllers
                 }
 
                 var category = await service.UpdateCategory(id, req);
-                return Ok(category);
+                return Ok(
+                    mapper.Map<CategoryResDto>(category)
+                );
             }
             catch (InvalidOperationException e)
             {
