@@ -28,7 +28,9 @@ builder.Services.AddDbContext<DataContext>(opt =>
 
 var mapperConfig = new MapperConfiguration(mc =>
 {
-    mc.AddProfile(new UserProfiles());
+    mc.AddProfile(new UserProfile());
+    mc.AddProfile(new CategoryProfile());
+    mc.AddProfile(new ProductProfile());
 });
 
 IMapper mapper = mapperConfig.CreateMapper();

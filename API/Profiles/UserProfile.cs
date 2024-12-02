@@ -5,9 +5,9 @@ using AutoMapper;
 
 namespace API.Profiles;
 
-public class UserProfiles : Profile
+public class UserProfile : Profile
 {
-    public UserProfiles()
+    public UserProfile()
     {
         CreateMap<AppUser, UserResDto>();
     }

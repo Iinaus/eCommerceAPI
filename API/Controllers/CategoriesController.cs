@@ -1,6 +1,7 @@
 using API.Data.Dtos;
 using API.Models;
 using API.Services.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,10 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoriesController(ICategoryService service) : ControllerBase
+    public class CategoriesController(ICategoryService service, IMapper mapper) : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<IPagedList<Category>>> GetAllCategories([FromQuery] int page = 1)
+        public async Task<ActionResult<IPagedList<CategoryResDto>>> GetAllCategories([FromQuery] int page = 1)
         {
             try
             {
@@ -32,7 +33,9 @@ namespace API.Controllers
             try
             {
                 var category = await service.GetById(id);
-                return Ok(category);
+                return Ok(
+                    mapper.Map<CategoryResDto>(category)
+                );
             }
             catch (InvalidOperationException e)
             {

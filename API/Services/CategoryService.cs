@@ -1,8 +1,10 @@
 using System;
+using System.Diagnostics;
 using API.Data;
 using API.Data.Dtos;
 using API.Models;
 using API.Services.Interfaces;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using X.PagedList.EntityFramework;
@@ -10,29 +12,36 @@ using X.PagedList.Extensions;
 
 namespace API.Services;
 
-public class CategoryService(DataContext context) : ICategoryService
+public class CategoryService(DataContext context, IMapper mapper) : ICategoryService
 {
   private const int PageSize = 10;
   
-  public async Task<IPagedList<Category>> GetAll(int page)
+  public async Task<IPagedList<CategoryResDto>> GetAll(int page)
   {
     if (page < 1)
     {
       page = 1;
     }
 
-    //TO-DO: miksi products[] on tyhjä, eli ei tuo tietoa?
+    var categories = await context.Categories
+      .Include(c => c.User)
+      .Include(c => c.Products)
+      .ToListAsync();
 
-    var categories = await context.Categories.ToListAsync();
-    var pagedCategories = categories.ToPagedList(page, PageSize);
+    var categoryDtos = mapper.Map<List<CategoryResDto>>(categories);
+
+    var pagedCategories = categoryDtos.ToPagedList(page, PageSize);
 
     return pagedCategories;
   }
 
   public async Task<Category> GetById(int id)
   {
-    //TO-DO: miksi products[] on tyhjä, eli ei tuo tietoa?
-    var category = await context.Categories.FirstAsync(category => category.Id == id);
+    var category = await context.Categories
+      .Include(c => c.User)
+      .Include(c => c.Products)
+      .FirstOrDefaultAsync(c => c.Id == id);
+
     return category;
   }
 
@@ -100,7 +109,10 @@ public class CategoryService(DataContext context) : ICategoryService
   public async Task<bool> DeleteCategory(int id)
   {
     var category = await GetById(id);
-    context.Categories.Remove(category);
+    //var products = category.Products;
+    //Console.WriteLine("############################################################");
+    //Console.WriteLine(products);
+    //context.Categories.Remove(category);
     await context.SaveChangesAsync();
     return true;
   }

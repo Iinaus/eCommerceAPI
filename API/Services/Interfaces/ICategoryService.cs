@@ -7,7 +7,7 @@ namespace API.Services.Interfaces;
 
 public interface ICategoryService
 {
-    Task<IPagedList<Category>> GetAll(int page);
+    Task<IPagedList<CategoryResDto>> GetAll(int page);
 
     Task<Category> GetById(int id);
     Task<IPagedList<Product>> GetProductsByCategoryId(int id, int page);
