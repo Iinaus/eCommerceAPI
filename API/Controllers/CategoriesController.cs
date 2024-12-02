@@ -77,7 +77,9 @@ namespace API.Controllers
                 }
 
                 var category = await service.Create(req, loggedInUser);
-                return Ok(category);
+                return Ok(
+                    mapper.Map<CategoryResDto>(category)
+                );
             }
             catch (Exception e)
             {
