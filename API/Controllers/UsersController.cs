@@ -19,9 +19,9 @@ namespace API.Controllers
             try
             {
                 var users = await service.GetAll();
-                //TO-DO: ei saa palauttaa koko useria: näkyy salasanat yms.
-                // Pitäisi palauttaa vain ne tiedot, jotka saa näyttää
-                return Ok(users);
+                return Ok(
+                    mapper.Map<List<UserResDto>>(users)
+                );
             }
             catch (Exception e)
             {
