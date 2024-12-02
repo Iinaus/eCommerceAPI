@@ -1,7 +1,9 @@
 using System;
 using API.Data;
+using API.Data.Dtos;
 using API.Models;
 using API.Services.Interfaces;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using X.PagedList.EntityFramework;
@@ -9,11 +11,11 @@ using X.PagedList.Extensions;
 
 namespace API.Services;
 
-public class ProductService(DataContext context) : IProductService
+public class ProductService(DataContext context, IMapper mapper) : IProductService
 {
    private const int PageSize = 10;
    
-   public async Task<IPagedList<Product>> GetAll(int page)
+   public async Task<IPagedList<ProductResDto>> GetAll(int page)
    {
       //lähde 1) ChatGPT, katso tarkempi kuvaus tiedoston lopusta
       if (page < 1)
@@ -22,7 +24,8 @@ public class ProductService(DataContext context) : IProductService
       }
 
       var products = await context.Products.ToListAsync();
-      var pagedProducts = products.ToPagedList(page, PageSize);
+      var productsDto = mapper.Map<List<ProductResDto>>(products);
+      var pagedProducts = productsDto.ToPagedList(page, PageSize);
 
       return pagedProducts;
    }
