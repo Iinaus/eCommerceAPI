@@ -48,7 +48,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}/products")]
-        public async Task<ActionResult<List<Product>>> GetProductsByCategoryId(int id, [FromQuery] int page = 1)
+        public async Task<ActionResult<List<ProductResDto>>> GetProductsByCategoryId(int id, [FromQuery] int page = 1)
         {
             try
             {

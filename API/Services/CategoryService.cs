@@ -45,7 +45,7 @@ public class CategoryService(DataContext context, IMapper mapper) : ICategorySer
     return category;
   }
 
-  public async Task<IPagedList<Product>> GetProductsByCategoryId(int id, int page)
+  public async Task<IPagedList<ProductResDto>> GetProductsByCategoryId(int id, int page)
   {
     try
     {
@@ -55,24 +55,10 @@ public class CategoryService(DataContext context, IMapper mapper) : ICategorySer
       }
 
       var category = await GetById(id);
-      // TODO: tee DTO, jotta ei näytetä turhia tietoja?
-      var products = await context.Products
-          .Where(p => p.CategoryId == id)
-          .Select(p => new Product
-          {
-              Id = p.Id,
-              Name = p.Name,
-              Description = p.Description,
-              CategoryId = p.CategoryId,
-              UnitPrice = p.UnitPrice
-          })
-          .ToListAsync();
+      var products = category.Products;
+      var productsDto = mapper.Map<List<ProductResDto>>(products);
 
-      /*Vaihtoehtoinen tapa:
-      var category = await GetById(id);
-      var products = category.Products;*/
-
-      var pagedProducts = products.ToPagedList(page, PageSize);          
+      var pagedProducts = productsDto.ToPagedList(page, PageSize);          
 
       return pagedProducts;          
     }
