@@ -12,7 +12,7 @@ namespace API.Controllers
     public class CartController(ICartService service, IMapper mapper) : ControllerBase
     {
         [HttpGet]
-        [Authorize(Policy = "RequireAdminRole")]
+        //[Authorize(Policy = "RequireAdminRole")]
         public async Task<ActionResult<List<Order>>> GetAllOrders()
         {
             try
@@ -31,7 +31,7 @@ namespace API.Controllers
 
         [HttpPost("items")]
         [Authorize]
-        public async Task<ActionResult<Order>> AddItemToCart(int productId) 
+        public async Task<ActionResult<Order>> AddItemToCart(AddItemToCartReqDto req) 
         {
             try
             {
@@ -40,7 +40,7 @@ namespace API.Controllers
                     return Unauthorized();
                 }
 
-                var order = await service.AddToCart(productId, loggedInUser);
+                var order = await service.AddToCart(req, loggedInUser);
                 return Ok(
                     mapper.Map<OrderResDto>(order)
                 );

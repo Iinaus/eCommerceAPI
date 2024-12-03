@@ -1,5 +1,6 @@
 using System;
 using API.Data;
+using API.Data.Dtos;
 using API.Models;
 using API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@ public class CartService(DataContext context) : ICartService
         return orders;
     }
 
-    public async Task<Order> AddToCart(int productId, AppUser loggedInUser)
+    public async Task<Order> AddToCart(AddItemToCartReqDto req, AppUser loggedInUser)
     {
         var order = await GetOpenOrder(loggedInUser);
 
@@ -31,14 +32,14 @@ public class CartService(DataContext context) : ICartService
         var addedItem = new OrderProduct
         {
             OrderId = order.Id,
-            ProductId = productId,
+            ProductId = req.Id,
             UnitCount = 1,
             //TO-DO: tarkista UnitPrice, minkä mukaan päivitetään
             UnitPrice = 100    
         };
 
         var existingItem = order.OrderProducts
-            .FirstOrDefault(o => o.ProductId == productId);
+            .FirstOrDefault(o => o.ProductId == req.Id);
 
         if (existingItem != null)
         {
