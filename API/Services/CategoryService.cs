@@ -14,21 +14,21 @@ namespace API.Services;
 
 public class CategoryService(DataContext context) : ICategoryService
 {
-  private const int PageSize = 10;
+  private const int PageSize = 2;
   
-  public async Task<IPagedList<Category>> GetAll(int page)
+  public async Task<IPagedList<Category>> GetAll(int? page)
   {
-    if (page < 1)
-    {
-      page = 1;
-    }
-
     var categories = await context.Categories
       .Include(c => c.User)
       .Include(c => c.Products)
       .ToListAsync();
 
-    var pagedCategories = categories.ToPagedList(page, PageSize);
+    if (page < 1 || !page.HasValue)
+    {
+      return categories.ToPagedList(1, categories.Count);
+    }
+
+    var pagedCategories = categories.ToPagedList(page.Value, PageSize);
 
     return pagedCategories;
   }
@@ -43,19 +43,19 @@ public class CategoryService(DataContext context) : ICategoryService
     return category;
   }
 
-  public async Task<IPagedList<Product>> GetProductsByCategoryId(int id, int page)
+  public async Task<IPagedList<Product>> GetProductsByCategoryId(int id, int? page)
   {
     try
     {
-      if (page < 1)
-      {
-        page = 1;
-      }
-
       var category = await GetById(id);
       var products = category.Products;
 
-      var pagedProducts = products.ToPagedList(page, PageSize);          
+      if (page < 1 || !page.HasValue)
+      {
+        return products.ToPagedList(1, products.Count);
+      }
+
+      var pagedProducts = products.ToPagedList(page.Value, PageSize);          
 
       return pagedProducts;          
     }

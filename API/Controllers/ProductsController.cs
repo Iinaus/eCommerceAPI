@@ -14,7 +14,7 @@ namespace API.Controllers
     {
 
         [HttpGet]
-        public async Task<ActionResult<IPagedList<Product>>> GetAllProducts([FromQuery] int page = 1)
+        public async Task<ActionResult<IPagedList<Product>>> GetAllProducts([FromQuery] int? page)
         {
             try
             {

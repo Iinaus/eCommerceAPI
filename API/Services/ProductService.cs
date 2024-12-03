@@ -15,16 +15,17 @@ public class ProductService(DataContext context) : IProductService
 {
    private const int PageSize = 1;
 
-   public async Task<IPagedList<Product>> GetAll(int page)
+   public async Task<IPagedList<Product>> GetAll(int? page)
    {
       //lähde 1) ChatGPT, katso tarkempi kuvaus tiedoston lopusta
-      if (page < 1)
+      var products = await context.Products.ToListAsync();
+
+      if (page < 1 || !page.HasValue)
       {
-         page = 1;
+         return products.ToPagedList(1, products.Count);
       }
 
-      var products = await context.Products.ToListAsync();
-      var pagedProducts = products.ToPagedList(page, PageSize);
+      var pagedProducts = products.ToPagedList(page.Value, PageSize);
 
       return pagedProducts;
    }

@@ -7,7 +7,7 @@ namespace API.Services.Interfaces;
 
 public interface IProductService
 {
-    Task<IPagedList<Product>> GetAll(int page);
+    Task<IPagedList<Product>> GetAll(int? page);
 
     Task<Product> GetById(int id);
 }

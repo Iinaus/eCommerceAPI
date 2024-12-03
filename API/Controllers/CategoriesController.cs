@@ -14,7 +14,7 @@ namespace API.Controllers
     public class CategoriesController(ICategoryService service, IMapper mapper) : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<IPagedList<Category>>> GetAllCategories([FromQuery] int page = 1)
+        public async Task<ActionResult<IPagedList<Category>>> GetAllCategories([FromQuery] int? page)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}/products")]
-        public async Task<ActionResult<List<Product>>> GetProductsByCategoryId(int id, [FromQuery] int page = 1)
+        public async Task<ActionResult<List<Product>>> GetProductsByCategoryId(int id, [FromQuery] int? page)
         {
             try
             {
