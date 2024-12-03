@@ -18,8 +18,5 @@ public class Order
     public virtual AppUser? Handler { get; set; }
 
     public virtual ICollection<OrderProduct> OrderProducts { get; set; } = [];
-
-
-
-
+    
 }
