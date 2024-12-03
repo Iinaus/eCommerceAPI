@@ -29,7 +29,7 @@ namespace API.Controllers
         }
 
 
-        [HttpPost("/items")]
+        [HttpPost("items")]
         [Authorize]
         public async Task<ActionResult<Order>> AddItemToCart(int productId) 
         {
@@ -49,6 +49,33 @@ namespace API.Controllers
             {
                 return BadRequest(e.Message);
             }
-        }        
+        } 
+
+        [HttpDelete("items/{itemId}")]
+        [Authorize]
+        public async Task<ActionResult<Order>> DeleteItemFromCart(int itemId) 
+        {
+            try
+            {
+                if (HttpContext.Items["loggedInUser"] is not AppUser loggedInUser)
+                {
+                    return Unauthorized();
+                }
+
+                var order = await service.DeleteFromCart(itemId, loggedInUser);
+                return Ok(
+                    mapper.Map<OrderResDto>(order)
+                );
+            }
+            catch (InvalidOperationException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+       
     }
 }

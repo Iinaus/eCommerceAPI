@@ -55,24 +55,33 @@ public class CartService(DataContext context) : ICartService
         return order;        
     }
 
+    public async Task<Order> DeleteFromCart(int itemId, AppUser loggedInUser)
+    {
+        var order = await GetOpenOrder(loggedInUser);
+        if (order == null) 
+        {
+           throw new InvalidOperationException("No open order found for the user.");
+        }
+
+        var item = order.OrderProducts
+            .FirstOrDefault(o => o.ProductId == itemId);
+
+        if (item == null) 
+        {
+           throw new InvalidOperationException("Item not found in the order.");
+        }        
+
+        context.OrdersProducts.RemoveRange(item);
+
+        await context.SaveChangesAsync(); 
+        return order;     
+    }
+
     public async Task<Order?> GetOpenOrder(AppUser loggedInUser)
     {
         var order = await context.Orders
             .Include(o => o.OrderProducts)
             .FirstOrDefaultAsync(o => o.CustomerId == loggedInUser.Id && o.State == "cart");
-        
-        if (order == null)
-        {
-            order = new Order
-            {
-                CreatedDate = DateTime.Now,
-                State = "cart",
-                CustomerId = loggedInUser.Id,
-                Customer = loggedInUser,
-            };
-            context.Orders.Add(order);
-            await context.SaveChangesAsync();
-        }
         
         return order;
     }
