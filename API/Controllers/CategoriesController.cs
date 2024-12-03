@@ -14,12 +14,14 @@ namespace API.Controllers
     public class CategoriesController(ICategoryService service, IMapper mapper) : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<IPagedList<CategoryResDto>>> GetAllCategories([FromQuery] int page = 1)
+        public async Task<ActionResult<IPagedList<Category>>> GetAllCategories([FromQuery] int page = 1)
         {
             try
             {
                 var categories = await service.GetAll(page);
-                return Ok(categories);
+                return Ok(
+                    mapper.Map<List<CategoryResDto>>(categories)
+                );
             }
             catch (Exception e)
             {
@@ -48,12 +50,14 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}/products")]
-        public async Task<ActionResult<List<ProductResDto>>> GetProductsByCategoryId(int id, [FromQuery] int page = 1)
+        public async Task<ActionResult<List<Product>>> GetProductsByCategoryId(int id, [FromQuery] int page = 1)
         {
             try
             {
                 var products = await service.GetProductsByCategoryId(id, page);
-                return Ok(products);
+                return Ok(
+                    mapper.Map<List<ProductResDto>>(products)
+                );
             }
             catch (InvalidOperationException e)
             {

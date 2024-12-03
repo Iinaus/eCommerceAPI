@@ -7,10 +7,10 @@ namespace API.Services.Interfaces;
 
 public interface ICategoryService
 {
-    Task<IPagedList<CategoryResDto>> GetAll(int page);
+    Task<IPagedList<Category>> GetAll(int page);
 
     Task<Category> GetById(int id);
-    Task<IPagedList<ProductResDto>> GetProductsByCategoryId(int id, int page);
+    Task<IPagedList<Product>> GetProductsByCategoryId(int id, int page);
 
     Task<Category> Create(AddCategoryReqDto req, AppUser loggedInUser);
 

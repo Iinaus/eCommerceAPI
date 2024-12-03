@@ -11,11 +11,11 @@ using X.PagedList.Extensions;
 
 namespace API.Services;
 
-public class ProductService(DataContext context, IMapper mapper) : IProductService
+public class ProductService(DataContext context) : IProductService
 {
-   private const int PageSize = 10;
-   
-   public async Task<IPagedList<ProductResDto>> GetAll(int page)
+   private const int PageSize = 1;
+
+   public async Task<IPagedList<Product>> GetAll(int page)
    {
       //lähde 1) ChatGPT, katso tarkempi kuvaus tiedoston lopusta
       if (page < 1)
@@ -24,8 +24,7 @@ public class ProductService(DataContext context, IMapper mapper) : IProductServi
       }
 
       var products = await context.Products.ToListAsync();
-      var productsDto = mapper.Map<List<ProductResDto>>(products);
-      var pagedProducts = productsDto.ToPagedList(page, PageSize);
+      var pagedProducts = products.ToPagedList(page, PageSize);
 
       return pagedProducts;
    }

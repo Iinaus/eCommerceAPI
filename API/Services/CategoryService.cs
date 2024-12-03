@@ -12,11 +12,11 @@ using X.PagedList.Extensions;
 
 namespace API.Services;
 
-public class CategoryService(DataContext context, IMapper mapper) : ICategoryService
+public class CategoryService(DataContext context) : ICategoryService
 {
   private const int PageSize = 10;
   
-  public async Task<IPagedList<CategoryResDto>> GetAll(int page)
+  public async Task<IPagedList<Category>> GetAll(int page)
   {
     if (page < 1)
     {
@@ -28,9 +28,7 @@ public class CategoryService(DataContext context, IMapper mapper) : ICategorySer
       .Include(c => c.Products)
       .ToListAsync();
 
-    var categoryDtos = mapper.Map<List<CategoryResDto>>(categories);
-
-    var pagedCategories = categoryDtos.ToPagedList(page, PageSize);
+    var pagedCategories = categories.ToPagedList(page, PageSize);
 
     return pagedCategories;
   }
@@ -45,7 +43,7 @@ public class CategoryService(DataContext context, IMapper mapper) : ICategorySer
     return category;
   }
 
-  public async Task<IPagedList<ProductResDto>> GetProductsByCategoryId(int id, int page)
+  public async Task<IPagedList<Product>> GetProductsByCategoryId(int id, int page)
   {
     try
     {
@@ -56,9 +54,8 @@ public class CategoryService(DataContext context, IMapper mapper) : ICategorySer
 
       var category = await GetById(id);
       var products = category.Products;
-      var productsDto = mapper.Map<List<ProductResDto>>(products);
 
-      var pagedProducts = productsDto.ToPagedList(page, PageSize);          
+      var pagedProducts = products.ToPagedList(page, PageSize);          
 
       return pagedProducts;          
     }

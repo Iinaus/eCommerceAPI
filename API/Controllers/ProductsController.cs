@@ -12,13 +12,16 @@ namespace API.Controllers
     [ApiController]
     public class ProductsController(IProductService service, IMapper mapper) : ControllerBase
     {
+
         [HttpGet]
-        public async Task<ActionResult<IPagedList<ProductResDto>>> GetAllProducts([FromQuery] int page = 1)
+        public async Task<ActionResult<IPagedList<Product>>> GetAllProducts([FromQuery] int page = 1)
         {
             try
             {
                 var products = await service.GetAll(page);
-                return Ok(products);
+                return Ok(
+                    mapper.Map<List<ProductResDto>>(products)
+                );
             }
             catch (Exception e)
             {
