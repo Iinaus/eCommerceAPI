@@ -19,24 +19,19 @@ public class CartService(DataContext context) : ICartService
 
     public async Task<Order> AddToCart(AddItemToCartReqDto req, AppUser loggedInUser)
     {
+        var product = await context.Products.FirstOrDefaultAsync(product => product.Id == req.Id);
+        
+        if (product == null) 
+        {
+            throw new InvalidOperationException("No item with given id was found");
+        }
+        
         var order = await GetOpenOrder(loggedInUser);
 
         if (order == null) 
         {
             order = await CreateNewOrder(loggedInUser);
-        }
-
-        //TO-DO: tarkista, että productID:llä on olemassa tuote
-        // ennen lisäämistä
-
-        var addedItem = new OrderProduct
-        {
-            OrderId = order.Id,
-            ProductId = req.Id,
-            UnitCount = 1,
-            //TO-DO: tarkista UnitPrice, minkä mukaan päivitetään
-            UnitPrice = 100    
-        };
+        }      
 
         var existingItem = order.OrderProducts
             .FirstOrDefault(o => o.ProductId == req.Id);
@@ -48,7 +43,14 @@ public class CartService(DataContext context) : ICartService
         }
         else
         {
-            context.OrdersProducts.Add(addedItem);
+            var newItem = new OrderProduct
+            {
+                OrderId = order.Id,
+                ProductId = req.Id,
+                UnitCount = 1,
+                UnitPrice = product.UnitPrice
+            };
+            context.OrdersProducts.Add(newItem);
         }
 
         await context.SaveChangesAsync();
