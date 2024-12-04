@@ -27,6 +27,10 @@ namespace API.Controllers
                     mapper.Map<OrderResDto>(order)
                 );
             }
+            catch (InvalidOperationException e)
+            {
+                return NotFound(e.Message);
+            }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
