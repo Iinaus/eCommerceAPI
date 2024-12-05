@@ -15,11 +15,6 @@ public class AccountService(DataContext context) : IAccountService
             .Include(o => o.OrderProducts)
             .Where(o => o.CustomerId == loggedInUser.Id)
             .ToListAsync();
-        
-        if (orders == null)
-        {
-            throw new InvalidOperationException("No orders found.");
-        }
 
         return orders;
     }
