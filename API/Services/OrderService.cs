@@ -8,6 +8,15 @@ namespace API.Services;
 
 public class OrderService(DataContext context) : IOrderService
 {
+    public async Task<List<Order>> GetAll()
+    {
+        var orders = await context.Orders
+            .Include(o => o.OrderProducts)
+            .ToListAsync();
+
+        return orders;
+    }
+    
     public async Task<Order> Checkout(AppUser loggedInUser)
     {
         var order = await context.Orders

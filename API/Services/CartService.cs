@@ -8,16 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace API.Services;
 
 public class CartService(DataContext context) : ICartService
-{
-    public async Task<List<Order>> GetAll()
-    {
-        var orders = await context.Orders
-            .Include(o => o.OrderProducts)
-            .ToListAsync();
-
-        return orders;
-    }
-
+{  
     public async Task<Order> AddToCart(AddItemToCartReqDto req, AppUser loggedInUser)
     {
         var product = await context.Products.FirstOrDefaultAsync(product => product.Id == req.Id);
