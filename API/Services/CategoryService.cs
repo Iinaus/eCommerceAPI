@@ -29,7 +29,6 @@ public class CategoryService(DataContext context) : ICategoryService
     }
 
     var pagedCategories = categories.ToPagedList(page.Value, PageSize);
-
     return pagedCategories;
   }
 
@@ -38,31 +37,34 @@ public class CategoryService(DataContext context) : ICategoryService
     var category = await context.Categories
       .Include(c => c.User)
       .Include(c => c.Products)
-      .FirstAsync(c => c.Id == id);
+      .FirstOrDefaultAsync(c => c.Id == id);
+
+    if (category == null)
+    {
+      throw new InvalidOperationException("Category not found.");
+    }
 
     return category;
   }
 
   public async Task<IPagedList<Product>> GetProductsByCategoryId(int id, int? page)
   {
-    try
+    var category = await GetById(id);
+    var products = category.Products;
+
+    if (products.Count == 0)
     {
-      var category = await GetById(id);
-      var products = category.Products;
-
-      if (page < 1 || !page.HasValue)
-      {
-        return products.ToPagedList(1, products.Count);
-      }
-
-      var pagedProducts = products.ToPagedList(page.Value, PageSize);          
-
-      return pagedProducts;          
+      throw new InvalidOperationException("Products not found.");
     }
-    catch (InvalidOperationException)
+
+    if (page < 1 || !page.HasValue)
     {
-        throw new InvalidOperationException();
+      return products.ToPagedList(1, products.Count);
     }
+
+    var pagedProducts = products.ToPagedList(page.Value, PageSize);          
+    return pagedProducts;          
+
   }
 
   public async Task<Category> Create(AddCategoryReqDto req, AppUser loggedInUser)
@@ -75,16 +77,18 @@ public class CategoryService(DataContext context) : ICategoryService
     };
 
     context.Categories.Add(category);
-    await context.SaveChangesAsync();
 
+    await context.SaveChangesAsync();
     return category;
   }
 
   public async Task<Category> UpdateCategory(int id, UpdateCategoryDto req)
   {
     var category = await GetById(id);
+
     category.Name = req.Name;
     category.Description = req.Description;
+
     await context.SaveChangesAsync();
     return category;
   }

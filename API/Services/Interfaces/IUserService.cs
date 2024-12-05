@@ -10,7 +10,7 @@ public interface IUserService
 
     Task<AppUser> GetById(int id);
 
-    Task<AppUser> UpdateById(int id, UpdateUserDto req);
+    Task<AppUser> UpdateRoleById(int id, UpdateUserRoleReqDto req);
 
     Task<AppUser> Create(AddUserReqDto req);
 

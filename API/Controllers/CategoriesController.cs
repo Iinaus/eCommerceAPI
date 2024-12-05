@@ -38,7 +38,7 @@ namespace API.Controllers
             }
             catch (InvalidOperationException e)
             {
-                return NotFound("category not found");
+                return NotFound(e.Message);
             }
             catch (Exception e)
             {
@@ -58,7 +58,7 @@ namespace API.Controllers
             }
             catch (InvalidOperationException e)
             {
-                return NotFound("category not found");
+                return NotFound(e.Message);
             }
             catch (Exception e)
             {
@@ -109,7 +109,7 @@ namespace API.Controllers
             }
             catch (InvalidOperationException e)
             {
-                return NotFound("category not found");
+                return NotFound(e.Message);
             }
             catch (Exception e)
             {
@@ -133,7 +133,7 @@ namespace API.Controllers
             }
             catch (InvalidOperationException e)
             {
-                return NotFound("category not found");
+                return NotFound(e.Message);
             }
             catch (Exception e)
             {

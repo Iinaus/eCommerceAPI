@@ -3,15 +3,16 @@ using API.Data.Dtos;
 using API.Models;
 using API.Services.Interfaces;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
     public class UsersController(IUserService service, IMapper mapper) : ControllerCustomBase
     {
+        // Listataan kaikki käyttäjät, joten vain adminit saavat nähdä tiedot
         [HttpGet]
+        [Authorize(Policy = "RequireAdminRole")]
         public async Task<ActionResult<List<AppUser>>> GetAllUsers() 
         {
             try
@@ -27,7 +28,9 @@ namespace API.Controllers
             }
         }
 
+        // Listataan tietyn käyttäjän tiedot, joten vain adminit saavat nähdä tiedot
         [HttpGet("{id}")]
+        [Authorize(Policy = "RequireAdminRole")]
         public async Task<ActionResult<AppUser>> GetUserById(int id) 
         {
             try
@@ -39,7 +42,7 @@ namespace API.Controllers
             }
             catch (InvalidOperationException e)
             {
-                return NotFound("user not found");
+                return NotFound(e.Message);
             }
             catch (Exception e)
             {
@@ -47,19 +50,21 @@ namespace API.Controllers
             }
         }
 
+        // Vain admin voi muuttaa käyttäjän roolia
         [HttpPut("{id}")]
-        public async Task<ActionResult<AppUser>> UpdateUserById(int id, UpdateUserDto req) 
+        [Authorize(Policy = "RequireAdminRole")]
+        public async Task<ActionResult<AppUser>> UpdateUserRoleById(int id, UpdateUserRoleReqDto req) 
         {
             try
             {
-                var user = await service.UpdateById(id, req);
+                var user = await service.UpdateRoleById(id, req);
                 return Ok(
                     mapper.Map<UserResDto>(user)
                 );
             }
             catch (InvalidOperationException e)
             {
-                return NotFound("user not found");
+                return NotFound(e.Message);
             }
             catch (Exception e)
             {

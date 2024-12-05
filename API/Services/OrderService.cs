@@ -39,7 +39,6 @@ public class OrderService(DataContext context) : IOrderService
         order.HandlerId = loggedInUser.Id;
 
         await context.SaveChangesAsync();
-
         return order;
     }
 

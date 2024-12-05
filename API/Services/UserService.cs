@@ -3,9 +3,11 @@ using System.Security.Cryptography;
 using System.Text;
 using API.Data;
 using API.Data.Dtos;
+using API.Data.Enums;
 using API.Models;
 using API.Services.Interfaces;
 using API.Tools.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 namespace API.Services;
 
@@ -19,14 +21,28 @@ public class UserService(DataContext context, ITokenTool tokenCreator) : IUserSe
 
    public async Task<AppUser> GetById(int id)
    {
-      var user = await context.Users.FirstAsync(user => user.Id == id);
+      var user = await context.Users.FirstOrDefaultAsync(user => user.Id == id);
+      
+      if (user == null)
+      {
+         throw new InvalidOperationException("User not found.");
+      }
+
       return user;
    }
   
-   public async Task<AppUser> UpdateById(int id, UpdateUserDto req)
+   public async Task<AppUser> UpdateRoleById(int id, UpdateUserRoleReqDto req)
    {
+      // lähde 1) ChatGPT, katso tarkempi kuvaus tiedoston lopusta
+      if (!Enum.TryParse(typeof(UserRole), req.Role, true, out var parsedRole))
+      {
+         throw new Exception($"Invalid role. Role must be one of the following: {string.Join(", ", Enum.GetNames(typeof(UserRole)))}");
+      }
+
       var user = await GetById(id);
-      user.UserName = req.UserName;
+
+      user.Role = req.Role;
+      
       await context.SaveChangesAsync();
       return user;
    }
@@ -82,4 +98,38 @@ public class UserService(DataContext context, ITokenTool tokenCreator) : IUserSe
 
    } 
 }
+
+/*
+lähde 1) chatGPT
+-------------------
+Kysymys: I am using .net core. How can I check that varbiale is in enum?
+
+Vastaus: 
+In .NET Core, you can check if a variable is a valid value of an enum using the
+Enum.IsDefined method. Here's how you can do it:
+
+namespace EnumCheckExample
+{
+    public enum Colors
+    {
+        Red,
+        Green,
+        Blue
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            object variable = "Red"; // This can be any type
+
+            // Check if variable is in Colors enum
+            bool isInEnum = Enum.TryParse(typeof(Colors), variable.ToString(), true, out var parsedValue)
+                            && Enum.IsDefined(typeof(Colors), parsedValue);
+
+            Console.WriteLine($"Is '{variable}' in Colors enum? {isInEnum}");
+        }
+    }
+}
+*/
 
