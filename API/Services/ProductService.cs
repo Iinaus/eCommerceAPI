@@ -13,11 +13,8 @@ namespace API.Services;
 
 public class ProductService(DataContext context) : IProductService
 {
-   private const int PageSize = 1;
-
-   public async Task<IPagedList<Product>> GetAll(int? page)
+   public async Task<IPagedList<Product>> GetAll(int? page, int pageSize)
    {
-      //lähde 1) ChatGPT, katso tarkempi kuvaus tiedoston lopusta
       var products = await context.Products.ToListAsync();
 
       // jos sivua ei anneta, palautetaan kaikki tulokset yhdellä sivulla
@@ -26,7 +23,8 @@ public class ProductService(DataContext context) : IProductService
          return products.ToPagedList(1, products.Count);
       }
 
-      var pagedProducts = products.ToPagedList(page.Value, PageSize);
+      // lähde 1) ChatGPT, katso tarkempi kuvaus tiedoston lopusta
+      var pagedProducts = products.ToPagedList(page.Value, pageSize);
 
       return pagedProducts;
    }
