@@ -14,6 +14,7 @@ public class CartService(DataContext context) : ICartService
         var orders = await context.Orders
             .Include(o => o.OrderProducts)
             .ToListAsync();
+
         return orders;
     }
 
@@ -28,11 +29,13 @@ public class CartService(DataContext context) : ICartService
         
         var order = await GetOpenOrder(loggedInUser);
 
+        // Jos avointa tilausta ei ole, luodaan uusi tilaus
         if (order == null) 
         {
             order = await CreateNewOrder(loggedInUser);
         }      
 
+        // Tarkistetaan löytyykö tuote tilaukselta jo valmiiksi
         var existingItem = order.OrderProducts
             .FirstOrDefault(o => o.ProductId == req.Id);
 
@@ -61,6 +64,7 @@ public class CartService(DataContext context) : ICartService
     public async Task<Order> DeleteFromCart(int itemId, AppUser loggedInUser)
     {
         var order = await GetOpenOrder(loggedInUser);
+
         if (order == null) 
         {
            throw new InvalidOperationException("No open order found for the user.");
@@ -83,6 +87,7 @@ public class CartService(DataContext context) : ICartService
     public async Task<Order> UpdateUnitCountFromCart(int itemId, UpdateItemInCartDto req, AppUser loggedInUser)
     {
         var order = await GetOpenOrder(loggedInUser);
+
         if (order == null) 
         {
            throw new InvalidOperationException("No open order found for the user.");
@@ -96,6 +101,8 @@ public class CartService(DataContext context) : ICartService
            throw new InvalidOperationException("Item not found in the order.");
         }
 
+        // Jos tuotteen lukumäärä pudotetaan nollaan tai alle,
+        // poistetaan tuote ostoskorista
         if (req.UnitCount < 1) 
         {
             await DeleteFromCart(itemId, loggedInUser);
@@ -127,9 +134,10 @@ public class CartService(DataContext context) : ICartService
             CustomerId = loggedInUser.Id,
             Customer = loggedInUser,
         };
+
         context.Orders.Add(order);
-        await context.SaveChangesAsync();
         
+        await context.SaveChangesAsync();
         return order;
     }
 

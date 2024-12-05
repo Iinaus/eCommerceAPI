@@ -10,7 +10,7 @@ namespace API.Controllers
     public class CartController(ICartService service, IMapper mapper) : ControllerCustomBase
     {
         // Listataan kaikkien käyttäjien kaikki tilaukset (myös poistetut),
-        //joten vain adminit saavat nähdä tiedot
+        // joten vain adminit saavat nähdä tiedot
         [HttpGet]
         [Authorize(Policy = "RequireAdminRole")]
         public async Task<ActionResult<List<Order>>> GetAllOrders()

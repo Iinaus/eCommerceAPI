@@ -39,7 +39,7 @@ namespace API.Controllers
             }
             catch (InvalidOperationException e)
             {
-                return NotFound("product not found");
+                return NotFound(e.Message);
             }
             catch (Exception e)
             {

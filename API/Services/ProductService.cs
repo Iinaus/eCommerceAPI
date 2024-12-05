@@ -20,6 +20,7 @@ public class ProductService(DataContext context) : IProductService
       //lähde 1) ChatGPT, katso tarkempi kuvaus tiedoston lopusta
       var products = await context.Products.ToListAsync();
 
+      // jos sivua ei anneta, palautetaan kaikki tulokset yhdellä sivulla
       if (page < 1 || !page.HasValue)
       {
          return products.ToPagedList(1, products.Count);
@@ -32,7 +33,12 @@ public class ProductService(DataContext context) : IProductService
 
    public async Task<Product> GetById(int id)
    {
-      var product = await context.Products.FirstAsync(product => product.Id == id);
+      var product = await context.Products.FirstOrDefaultAsync(product => product.Id == id);
+
+      if (product == null)
+      {
+         throw new InvalidOperationException("Product not found.");
+      }
       return product;
    }
   

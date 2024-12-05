@@ -4,10 +4,8 @@ using API.Data;
 using API.Data.Dtos;
 using API.Models;
 using API.Services.Interfaces;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;
-using X.PagedList.EntityFramework;
 using X.PagedList.Extensions;
 
 namespace API.Services;
@@ -23,6 +21,7 @@ public class CategoryService(DataContext context) : ICategoryService
       .Include(c => c.Products)
       .ToListAsync();
 
+    // jos sivua ei anneta, palautetaan kaikki tulokset yhdellä sivulla
     if (page < 1 || !page.HasValue)
     {
       return categories.ToPagedList(1, categories.Count);
@@ -57,6 +56,7 @@ public class CategoryService(DataContext context) : ICategoryService
       throw new InvalidOperationException("Products not found.");
     }
 
+    // jos sivua ei anneta, palautetaan kaikki tulokset yhdellä sivulla
     if (page < 1 || !page.HasValue)
     {
       return products.ToPagedList(1, products.Count);
