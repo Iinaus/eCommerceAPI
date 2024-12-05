@@ -1,15 +1,13 @@
 using API.Models;
 using API.Services.Interfaces;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController(IAccountService service, IMapper mapper) : ControllerBase
+    public class AccountController(IAccountService service) : ControllerBase
     {
         [HttpDelete("orders/{id}")]
         [Authorize]
