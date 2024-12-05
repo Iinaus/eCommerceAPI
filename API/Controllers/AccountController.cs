@@ -5,9 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AccountController(IAccountService service) : ControllerBase
+    public class AccountController(IAccountService service) : ControllerCustomBase
     {
         [HttpDelete("orders/{id}")]
         [Authorize]

@@ -8,9 +8,7 @@ using X.PagedList;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CategoriesController(ICategoryService service, IMapper mapper) : ControllerBase
+    public class CategoriesController(ICategoryService service, IMapper mapper) : ControllerCustomBase
     {
         [HttpGet]
         public async Task<ActionResult<IPagedList<Category>>> GetAllCategories([FromQuery] int? page)

@@ -8,9 +8,7 @@ using API.Data.Dtos;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProductsController(IProductService service, IMapper mapper) : ControllerBase
+    public class ProductsController(IProductService service, IMapper mapper) : ControllerCustomBase
     {
 
         [HttpGet]

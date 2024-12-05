@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class OrdersController(IOrderService service, IMapper mapper) : ControllerBase
+    public class OrdersController(IOrderService service, IMapper mapper) : ControllerCustomBase
     {
         [HttpPost]
         [Authorize]

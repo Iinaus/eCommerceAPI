@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CartController(ICartService service, IMapper mapper) : ControllerBase
+    public class CartController(ICartService service, IMapper mapper) : ControllerCustomBase
     {
         [HttpGet]
         //[Authorize(Policy = "RequireAdminRole")]

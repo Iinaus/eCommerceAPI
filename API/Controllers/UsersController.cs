@@ -9,9 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UsersController(IUserService service, IMapper mapper) : ControllerBase
+    public class UsersController(IUserService service, IMapper mapper) : ControllerCustomBase
     {
         [HttpGet]
         public async Task<ActionResult<List<AppUser>>> GetAllUsers() 
