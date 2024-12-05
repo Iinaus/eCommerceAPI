@@ -25,4 +25,23 @@ public class OrderService(DataContext context) : IOrderService
         return order;
     }
 
+    public async Task<Order> Confirm(int orderId, AppUser loggedInUser)
+    {
+        var order = await context.Orders
+            .FirstOrDefaultAsync(o => o.Id == orderId && o.State == "ordered");
+
+        if (order == null)
+        {
+            throw new InvalidOperationException("No order to confirm was found.");
+        }
+
+        order.State = "confirmed";
+        order.ConfirmedDate = DateTime.Now;
+        order.HandlerId = loggedInUser.Id;
+
+        await context.SaveChangesAsync();
+
+        return order;
+    }
+
 }

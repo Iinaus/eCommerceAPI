@@ -7,4 +7,5 @@ namespace API.Services.Interfaces;
 public interface IOrderService
 {
     Task<Order> Checkout(AppUser loggedInUser);
+    Task<Order> Confirm(int orderId, AppUser loggedInUser);
 }

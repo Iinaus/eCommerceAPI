@@ -36,5 +36,31 @@ namespace API.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpPost("{orderId}/confirm")]
+        [Authorize(Policy = "RequireModeratorRole")]
+        public async Task<ActionResult<Order>> ConfirmOrder(int orderId)
+        {
+            try
+            {
+                if (HttpContext.Items["loggedInUser"] is not AppUser loggedInUser)
+                {
+                    return Unauthorized();
+                }
+
+                var order = await service.Confirm(orderId, loggedInUser);
+                return Ok(
+                    mapper.Map<OrderResDto>(order)
+                );
+            }
+            catch (InvalidOperationException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

@@ -66,6 +66,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("admin"));
+    // oletetaan, että admin oikeudet pitävät sisällään myös moderator-oikeudet, joten myös admin saa pääsyn moderator-roolin endpointteihin
+    options.AddPolicy("RequireModeratorRole", policy => policy.RequireRole("moderator", "admin"));
 });
 
 builder.Services.AddScoped<RequireLoggedInUserMiddleware>();
