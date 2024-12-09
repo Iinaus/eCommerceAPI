@@ -31,8 +31,8 @@ This project relies on the following dependencies:
 - **.NET Core SDK**: Framework for building and running the application.
 - **Entity Framework Core**: An ORM (Object-Relational Mapper) for database interactions. Supports various database providers, including SQLite in this project.
 - **JWT Authentication**:
--     **Microsoft.AspNetCore.Authentication.JwtBearer**: For securing API endpoints using JSON Web Tokens (JWT).
--     **System.IdentityModel.Tokens.Jwt**: Handles creation and validation of JWTs.
+-   **Microsoft.AspNetCore.Authentication.JwtBearer**: For securing API endpoints using JSON Web Tokens (JWT).
+-   **System.IdentityModel.Tokens.Jwt**: Handles creation and validation of JWTs.
 - **AutoMapper**: Simplifies object-to-object mapping.
 
 Ensure these dependencies are installed to ensure smooth execution of the project.
@@ -41,11 +41,11 @@ Ensure these dependencies are installed to ensure smooth execution of the projec
 
 1. Clone the project
 2. Install the .NET Core SDK.
-   Ensure the correct version of the .NET Core SDK is installed. Check the .csproj file for the targeted framework version.
+   - Ensure the correct version of the .NET Core SDK is installed. Check the .csproj file for the targeted framework version.
 4. Restore Dependencies (NuGet packages):
 `dotnet restore`
 5. Update the Database
-   If using Entity Framework Core, apply migrations to the database:
+   - If using Entity Framework Core, apply migrations to the database:
 `dotnet ef database update`
 7. Run the Project
 Use the following command to run the application:
