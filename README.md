@@ -31,8 +31,8 @@ This project relies on the following dependencies:
 - **.NET Core SDK**: Framework for building and running the application.
 - **Entity Framework Core**: An ORM (Object-Relational Mapper) for database interactions. Supports various database providers, including SQLite in this project.
 - **JWT Authentication**:
--   **Microsoft.AspNetCore.Authentication.JwtBearer**: For securing API endpoints using JSON Web Tokens (JWT).
--   **System.IdentityModel.Tokens.Jwt**: Handles creation and validation of JWTs.
+  -   **Microsoft.AspNetCore.Authentication.JwtBearer**: For securing API endpoints using JSON Web Tokens (JWT).
+  -   **System.IdentityModel.Tokens.Jwt**: Handles creation and validation of JWTs.
 - **AutoMapper**: Simplifies object-to-object mapping.
 
 Ensure these dependencies are installed to ensure smooth execution of the project.
@@ -50,7 +50,7 @@ Ensure these dependencies are installed to ensure smooth execution of the projec
 7. Run the Project
    - Use the following command to run the application:
 `dotnet run`
-- Alternatively, use dotnet watch to automatically monitor code changes and restart the application when a change is detected:
+  - Alternatively, use dotnet watch to automatically monitor code changes and restart the application when a change is detected:
 `dotnet watch`
 
 ## API documentation
