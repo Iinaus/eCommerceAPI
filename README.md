@@ -49,7 +49,7 @@ If using Entity Framework Core, apply migrations to the database:
 `dotnet ef database update`
 5. Run the Project
 Use the following command to run the application:
-`dotnet run
+`dotnet run`
 Alternatively, use dotnet watch to automatically monitor code changes and restart the application when a change is detected:
 `dotnet watch`
 
