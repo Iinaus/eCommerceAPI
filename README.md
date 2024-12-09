@@ -48,9 +48,9 @@ Ensure these dependencies are installed to ensure smooth execution of the projec
    - If using Entity Framework Core, apply migrations to the database:
 `dotnet ef database update`
 7. Run the Project
-Use the following command to run the application:
+   - Use the following command to run the application:
 `dotnet run`
-Alternatively, use dotnet watch to automatically monitor code changes and restart the application when a change is detected:
+- Alternatively, use dotnet watch to automatically monitor code changes and restart the application when a change is detected:
 `dotnet watch`
 
 ## API documentation
