@@ -48,10 +48,8 @@ Ensure these dependencies are installed to ensure smooth execution of the projec
    - If using Entity Framework Core, apply migrations to the database:
 `dotnet ef database update`
 7. Run the Project
-   - Use the following command to run the application:
-`dotnet run`
-  - Alternatively, use dotnet watch to automatically monitor code changes and restart the application when a change is detected:
-`dotnet watch`
+   - Use the following command to run the application: `dotnet run`
+   - Alternatively, use dotnet watch to automatically monitor code changes and restart the application when a change is detected: `dotnet watch`
 
 ## API documentation
 This project provides an interactive Swagger UI for easy exploration and testing of the API endpoints. When you run the project locally, you can access the Swagger documentation in your browser, which will automatically be generated for all API routes.
